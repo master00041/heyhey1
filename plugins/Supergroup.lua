@@ -39,7 +39,7 @@ local function check_member_super(cb_extra, success, result)
       end
       data[tostring(groups)][tostring(msg.to.id)] = msg.to.id
       save_data(_config.moderation.data, data)
-	  local text = 'Supergroup has been Added \n\n Added by : @'..msg.from.username..''
+	  local text = '<b>Supergroup has been Added</b> \n\n <b>Added by</b> : @'..msg.from.username..''
       return reply_msg(msg.id, text, ok_cb, false)
     end
   end
@@ -63,7 +63,7 @@ local function check_member_superrem(cb_extra, success, result)
       end
       data[tostring(groups)][tostring(msg.to.id)] = nil
       save_data(_config.moderation.data, data)
-	  local text = 'SuperGroup has been removed \n\n Removed by : @'..msg.from.username..''
+	  local text = '<b>SuperGroup has been removed</b> \n\n <b>Removed by</b> : @'..msg.from.username..''
       return reply_msg(msg.id, text, ok_cb, false)
     end
   end
@@ -179,11 +179,22 @@ local function lock_group_links(msg, data, target)
   end
   local group_link_lock = data[tostring(target)]['settings']['lock_link']
   if group_link_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>Link posting is already locked</b> \n\n <b>You can use /nlk links to Unlock it at any time</b>'
   else
+  return '<i>قفل ارسال لینک در سوپر گروه از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['lock_link'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>Link posting has been locked</b> \n\n <b>Locked by </b> : @'..msg.from.username..''
+	else 
+	return '<i>قفل ارسال لینک در سوپر گروه توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -193,11 +204,22 @@ local function unlock_group_links(msg, data, target)
   end
   local group_link_lock = data[tostring(target)]['settings']['lock_link']
   if group_link_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>Link posting is not locked</b> \n\n <b>You can Lock it anytime by using /lk links</b>'
   else
+  return '<i>قفل ارسال لینک از قبل غیر فعال بود</i>'
+  end
+  end
     data[tostring(target)]['settings']['lock_link'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '</b>Link posting has been unlocked</b> \n\n <b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل ارسال لینک توسط @'..msg.from.username..'غیر فعال شد</i>'
   end
 end
 
@@ -207,11 +229,22 @@ local function lock_group_all(msg, data, target)
   end
   local group_all_lock = data[tostring(target)]['settings']['all']
   if group_all_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>all setting is already locked</b> \n\n <b>You can use /nlk all at anytime to Unlock it</b>'
   else
+  return '<i>قفل همه تنظیمات از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['all'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>all setting has been locked</b> \n\n <b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل همه تنظیمات توسط @'..msg.from.username..'فعال گردید</i>'
   end
 end
 
@@ -221,11 +254,22 @@ local function unlock_group_all(msg, data, target)
   end
   local group_all_lock = data[tostring(target)]['settings']['all']
   if group_all_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>all setting is not locked</b> \n\n <b>You can use /lk all anytime to Lock it</b>'
   else
+  return '<i>قفل همه تنظیمات از قبل غیر فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['all'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>all setting has been unlocked</b> \n\n <b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل همه تنظیمات توسط @'..msg.from.username..'غیر فعال گردید</i>'
   end
 end
 
@@ -235,11 +279,22 @@ local function lock_group_etehad(msg, data, target)
   end
   local group_etehad_lock = data[tostring(target)]['settings']['etehad']
   if group_etehad_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>etehad setting is already locked</b> \n\n <b>You can use /nlk etehad any time to Unlock it</b>'
   else
+  return '<i>قفل تنظیمات اتحاد از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['etehad'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>etehad setting has been locked</b> \n\n <b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل تنظیمات اتحاد توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -249,11 +304,22 @@ local function unlock_group_etehad(msg, data, target)
   end
   local group_etehad_lock = data[tostring(target)]['settings']['etehad']
   if group_etehad_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>etehad setting is not locked</b> \n\n <b>You can use /lk etehad any time to Lock it</b>'
   else
+  return '<i>قفل تنظیمات اتحاد از قبل غیر فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['etehad'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>etehad setting has been unlocked</b> \n\n <b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل تنظیمات اتحاد توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -263,11 +329,22 @@ local function lock_group_leave(msg, data, target)
   end
   local group_leave_lock = data[tostring(target)]['settings']['leave']
   if group_leave_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>leave is already locked</b> \n\n <b>You can use /nlk leave any time to Unlock it</b>'
   else
+  return '<i>قفل ترک کردن گروه از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['leave'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>leave has been locked</b> \n\n <b>Locked by</b> : @'..msg.from.username..' '
+	else
+	return '<i>قفل ترک گروه توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -277,11 +354,22 @@ local function unlock_group_leave(msg, data, target)
   end
   local group_leave_lock = data[tostring(target)]['settings']['leave']
   if group_leave_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>leave is not locked</b> \n\n <b>You can use /lk leave any time to Lock it</b>'
   else
+  return '<i>قفل ترک گروه از قبل غیر فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['leave'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>leave has been unlocked</b> \n\n <b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل ترک گروه توسط @'..msg.from.username..'غیر فعال شد</i>'
   end
 end
 
@@ -291,11 +379,22 @@ local function lock_group_operator(msg, data, target)
   end
   local group_operator_lock = data[tostring(target)]['settings']['operator']
   if group_operator_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>operator is already locked</b> \n\n <b>You can use /nlk operator to Unlock it anytime</b>'
   else
+  return '<i>قفل اوپراتور از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['operator'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>operator has been locked</b> \n\n <b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل اوپراتورتوسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -305,11 +404,22 @@ local function unlock_group_operator(msg, data, target)
   end
   local group_operator_lock = data[tostring(target)]['settings']['operator']
   if group_operator_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>operator is not locked</b> \n\n <b>You can use /lk operator anytime to Lock it</b>'
   else
+  return '<i>قفل اوپراتور از قبل غیر فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['operator'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>operator has been unlocked</b> \n\n <b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return 'قفل اوپراتور توسط<i> @'..msg.from.username..'غیر فعال شد</i>'
   end
 end
 
@@ -319,11 +429,22 @@ local function lock_group_reply(msg, data, target)
   end
   local group_reply_lock = data[tostring(target)]['settings']['reply']
   if group_reply_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>reply is already locked</b> \n\n <b>You can Unlock it by using /nlk reply</b>'
   else
+  return '<i>قفل ریپلای از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['reply'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>reply has been locked</b> \n\n <b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل ریپلای توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -333,11 +454,20 @@ local function unlock_group_reply(msg, data, target)
   end
   local group_reply_lock = data[tostring(target)]['settings']['reply']
   if group_reply_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>reply is not locked</b> \n\n <b>You can use /lk reply anytime To Lock it</b> '
   else
+  return '<i>قفل ریپلای از قبل غیر فعال بوده است</i>'
     data[tostring(target)]['settings']['reply'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>reply has been unlocked<b> \n\n <b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل ریپلای توسط @'..msg.from.username..'غیر فعال گردید</i>'
   end
 end
 
@@ -347,11 +477,22 @@ local function lock_group_username(msg, data, target)
   end
   local group_username_lock = data[tostring(target)]['settings']['username']
   if group_username_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>username is already locked</b> \n\n <b>You can use /nlk username anytime to Unlock it</b>'
   else
+  return '<i>قفل یوزرنیم از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['username'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>username has been locked</b> \n\n <b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل یوزرنیم توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -361,11 +502,20 @@ local function unlock_group_username(msg, data, target)
   end
   local group_username_lock = data[tostring(target)]['settings']['username']
   if group_username_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>username is not locked</b> \n\n <b>You can use /lk username yo Lock it</b>'
   else
+  return '<i>قفل یوزرنیم از قبل غیر فعال بوده است</i>'
     data[tostring(target)]['settings']['username'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>username has been unlocked</b> \n\n <b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل یوزرنیم توسط @'..msg.from.username..'غیر فعال شد</i>'
   end
 end
 
@@ -375,11 +525,22 @@ local function lock_group_media(msg, data, target)
   end
   local group_media_lock = data[tostring(target)]['settings']['media']
   if group_media_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>media is already locked</b>'
   else
+  return '<i>قفل فایل های رسانه ای از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['media'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>media has been locked</b> \n\n  <b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل پیام های چند رسانه ای توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -389,11 +550,22 @@ local function unlock_group_media(msg, data, target)
   end
   local group_media_lock = data[tostring(target)]['settings']['media']
   if group_media_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>media is not locked</b>'
   else
+  return '<i>قفل پیام های چند رسانه ای غیر فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['media'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>media has been unlocked</b> \n\n<b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل پیام های چند رسانه ای توسط<i> @'..msg.from.username..'غیر فعال شد</i>'
   end
 end
 
@@ -403,11 +575,22 @@ local function lock_group_fosh(msg, data, target)
   end
   local group_fosh_lock = data[tostring(target)]['settings']['fosh']
   if group_fosh_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>fosh is already locked</b>'
   else
+  return '<i>قفل فحش از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['fosh'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>fosh has been locked</b> \n\n<b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل فحش توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -417,11 +600,22 @@ local function unlock_group_fosh(msg, data, target)
   end
   local group_fosh_lock = data[tostring(target)]['settings']['fosh']
   if group_fosh_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>fosh is not locked</b>'
   else
+  return '<i>قفل فحش از قبل غیر فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['fosh'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>fosh has been unlocked</b> \n\nUnlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل فحش توسط @'..msg.from.username..'غیر فعال شد</i>'
   end
 end
 
@@ -431,11 +625,22 @@ local function lock_group_join(msg, data, target)
   end
   local group_join_lock = data[tostring(target)]['settings']['join']
   if group_join_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>join is already locked</b>'
   else
+  return '<i>قفل جوین از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['join'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>join has been locked</b> \n\n<b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل جوین توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -445,11 +650,22 @@ local function unlock_group_join(msg, data, target)
   end
   local group_join_lock = data[tostring(target)]['settings']['join']
   if group_join_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>join is not locked</b>'
   else
+  return '<i>قفل جوین از قبل غیرفعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['join'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>join has been unlocked</b> \n\n<b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل جوین توسط @'..msg.from.username..'غیر فعال شد</i>'
   end
 end
 
@@ -459,11 +675,22 @@ local function lock_group_fwd(msg, data, target)
   end
   local group_fwd_lock = data[tostring(target)]['settings']['fwd']
   if group_fwd_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>fwd is already locked</b>'
   else
+  return '<i>قفل فوروارد متن از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['fwd'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>fwd has been locked</b> \n\n<b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل فوروارد متن توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -473,11 +700,22 @@ local function unlock_group_fwd(msg, data, target)
   end
   local group_fwd_lock = data[tostring(target)]['settings']['fwd']
   if group_fwd_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>fwd is not locked</b>'
   else
+  return '<i>قفل فوروارد از قبل غیر فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['fwd'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>fwd has been unlocked</b> \n\n<b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل فوروارد توسط @'..msg.from.username..'غیر فعال شد</i>'
   end
 end
 
@@ -487,11 +725,22 @@ local function lock_group_english(msg, data, target)
   end
   local group_english_lock = data[tostring(target)]['settings']['english']
   if group_english_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>english is already locked</b>'
   else
+  return '<i>قفل متن انگلیسی از قبل فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['english'] = 'yes'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>english has been locked</b> \n\n<b>Locked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل متن انگلیسی توسط @'..msg.from.username..'فعال شد</i>'
   end
 end
 
@@ -501,11 +750,22 @@ local function unlock_group_english(msg, data, target)
   end
   local group_english_lock = data[tostring(target)]['settings']['english']
   if group_english_lock == 'no' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>english is not locked</b>'
   else
+  return '<i>قفل متن انگلیسی از قبل غیر فعال بوده است</i>'
+  end
+  end
     data[tostring(target)]['settings']['english'] = 'no'
     save_data(_config.moderation.data, data)
+	local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>english has been unlocked</b> \n\n<b>Unlocked by</b> : @'..msg.from.username..''
+	else
+	return '<i>قفل متن انگلیسی توسط @'..msg.from.username..'غیر فعال شد</i>'
   end
 end
 
@@ -515,8 +775,12 @@ local function lock_group_emoji(msg, data, target)
   end
   local group_emoji_lock = data[tostring(target)]['settings']['emoji']
   if group_emoji_lock == 'yes' then
+  local hash = 'group:'..msg.to.id
+  local group_lang = redis.hget(hash,'lang')
+  if group_lang then
     return '<b>emoji is already locked</b>'
   else
+  return '<i>قفل ارسال شکلک از قبل فعال بوده است</i>'
     data[tostring(target)]['settings']['emoji'] = 'yes'
     save_data(_config.moderation.data, data)
     return '<b>emoji has been locked</b> \n\n<b>Locked by</b> : @'..msg.from.username..''
